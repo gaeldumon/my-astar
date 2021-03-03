@@ -163,6 +163,7 @@ function AStar(grid, start, goal) {
 
 			if (current === goal) {
 				console.log("ARRIVED")
+				document.getElementById('finishMessage').textContent = "Arrived!"
 				clearInterval(inter)
 				return 1;
 			}
