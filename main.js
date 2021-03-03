@@ -2,15 +2,24 @@
 
 const canvas = document.getElementById('pathscreen')
 const ctx = canvas.getContext('2d')
+if (!ctx) alert('Canvas not supported')
+
+// Radius of each cell of the grid
 const CELL_RADIUS = 6
+// Execution speed in seconds
 const SPEED = 0.1
+// Number of obstacles to avoid
+const OBSTACLES = 150
+// Between 0 and 2499
+const START_INDEX = 0
+// Between 0 and 2499
+const GOAL_INDEX = 2499
 
 /**
  * Node constructor
  * @param {Number} x 
  * @param {Number} y 
  * @param {Number} i Index in the array
- * @param {Grid} grid Grid where the node is
  * @return void
  */
 function Node(x, y, i) {
@@ -82,6 +91,11 @@ function Grid() {
 	}
 }
 
+/**
+ * Get all neighbors (up, down, right, left and diagonals) of a node
+ * @param {Grid} grid 
+ * @param {Node} node 
+ */
 function getNeighbors(grid, node) {
 	const saut = CELL_RADIUS * 2
 	const x = node.x
@@ -112,7 +126,7 @@ function getNeighbors(grid, node) {
 }
 
 /**
- * 
+ * Create and draw n obstacles on grid
  * @param {Number} n 
  * @param {Grid} grid 
  */
@@ -125,6 +139,11 @@ function makeObstacles(n, grid) {
 	}
 }
 
+/**
+ * Remove elt from arr
+ * @param {Array} arr 
+ * @param {*} elt 
+ */
 function removeFromArray(arr, elt) {
 	// Could use indexOf here instead to be more efficient
 	for (let i = arr.length - 1; i >= 0; i--) {
@@ -134,6 +153,11 @@ function removeFromArray(arr, elt) {
 	}
 }
 
+/**
+ * Calculate distance between a and b
+ * @param {Node} a 
+ * @param {Node} b 
+ */
 function dist(a, b) {
 	const x = a.x - b.x
 	const y = a.y - b.y
@@ -151,6 +175,7 @@ function AStar(grid, start, goal) {
 	let closedSet = []
 	openSet.push(start)
 
+	// Storing the setInterval to call clearInterval later
 	let inter = setInterval(() => {
 		if (openSet.length > 0) {
 			let winner = 0
@@ -161,6 +186,7 @@ function AStar(grid, start, goal) {
 			}
 			let current = openSet[winner]
 
+			// Arrived at destination
 			if (current === goal) {
 				console.log("ARRIVED")
 				document.getElementById('finishMessage').textContent = "Arrived!"
@@ -173,25 +199,25 @@ function AStar(grid, start, goal) {
 			closedSet.push(current)
 
 			let neighbors = getNeighbors(grid, current)
-			for (const nei of neighbors) {
-				if (!closedSet.includes(nei) && !nei.isObstacle) {
-					let tempG = current.g + heuristic(nei, current)
+			for (const neighbor of neighbors) {
+				if (!closedSet.includes(neighbor) && !neighbor.isObstacle) {
+					let tempG = current.g + heuristic(neighbor, current)
 					let newPath = false
 
-					if (openSet.includes(nei)) {
-						if (tempG < nei.g) {
+					if (openSet.includes(neighbor)) {
+						if (tempG < neighbor.g) {
 							newPath = true
 						}
 					} else {
-						nei.g = tempG
+						neighbor.g = tempG
 						newPath = true
-						openSet.push(nei)
+						openSet.push(neighbor)
 					}
 
 					if (newPath) {
-						nei.h = heuristic(nei, goal)
-						nei.f = nei.g + nei.h
-						nei.previous = current
+						neighbor.h = heuristic(neighbor, goal)
+						neighbor.f = neighbor.g + neighbor.h
+						neighbor.previous = current
 					}
 				}
 			}
@@ -211,15 +237,16 @@ function AStar(grid, start, goal) {
 const grid = new Grid()
 grid.create()
 
-const start = grid.nodes[0]
-const goal = grid.nodes[2499]
+const start = grid.nodes[START_INDEX]
+const goal = grid.nodes[GOAL_INDEX]
 
-makeObstacles(100, grid)
+makeObstacles(OBSTACLES, grid)
 
 start.drawFilled('start')
 goal.drawFilled('goal')
 
 const launchBtn = document.getElementById('launchBtn')
-launchBtn.addEventListener('click', () => {
+launchBtn.addEventListener('click', (e) => {
 	AStar(grid, start, goal)
+	e.target.disabled = true
 })
