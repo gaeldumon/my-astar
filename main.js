@@ -7,7 +7,7 @@ if (!ctx) alert('Canvas not supported')
 // Radius of each cell of the grid
 const CELL_RADIUS = 6
 // Execution speed in seconds
-const SPEED = 0.1
+const SPEED = 0.08
 // Number of obstacles to avoid
 const OBSTACLES = 150
 // Between 0 and 2499
@@ -40,6 +40,7 @@ function Node(x, y, i) {
 	this.colorFilledNeighbor = 'rgb(252, 106, 240)'
 	this.colorFilledClosedSet = 'rgb(7, 240, 252)'
 	this.colorFilledOpenSet = 'rgb(252, 248, 45)'
+	this.colorFilledPath = 'rgb(252, 248, 45)'
 
 	this.draw = function () {
 		ctx.strokeStyle = this.color
@@ -65,6 +66,8 @@ function Node(x, y, i) {
 			ctx.fillStyle = this.colorFilledOpenSet
 		} else if (type === 'obstacle') {
 			ctx.fillStyle = this.colorFilled
+		} else if (type === 'path') {
+			ctx.fillStyle = this.colorFilledPath
 		} else {
 			ctx.fillStyle = this.colorFilled
 		}
@@ -176,6 +179,7 @@ function heuristic(a, b) {
 function AStar(grid, start, goal) {
 	let openSet = []
 	let closedSet = []
+	let path = []
 	openSet.push(start)
 
 	// Storing the setInterval to call clearInterval later
@@ -224,14 +228,31 @@ function AStar(grid, start, goal) {
 					}
 				}
 			}
+
+			//region Find and draw the path by working backwards
+			path = []
+			let temp = current
+			path.push(temp)
+			while (temp.previous) {
+				path.push(temp.previous)
+				temp = temp.previous
+			}
+			for (let p of path) {
+				grid.nodes[p.index].drawFilled('path')
+			}
+			//endregion
+
 		} else {
 			console.log('NO SOLUTION')
 			return 0
 		}
 
+		//region Drawing closedSet nodes
 		for (let n of closedSet) {
-			grid.nodes[n.index].drawFilled('closedSet')
+			if (!path.includes(n))
+				grid.nodes[n.index].drawFilled('closedSet')
 		}
+		//endregion
 
 	}, SPEED * 1000)
 }
