@@ -38,7 +38,8 @@ function Node(x, y, i) {
 	this.colorFilledArrival = 'rgb(88, 239, 98)'
 	this.colorFilledStart = 'rgb(73, 73, 252)'
 	this.colorFilledNeighbor = 'rgb(252, 106, 240)'
-	this.colorFilledPath = 'rgb(7, 240, 252)'
+	this.colorFilledClosedSet = 'rgb(7, 240, 252)'
+	this.colorFilledOpenSet = 'rgb(252, 248, 45)'
 
 	this.draw = function () {
 		ctx.strokeStyle = this.color
@@ -58,8 +59,10 @@ function Node(x, y, i) {
 			} else {
 				ctx.fillStyle = this.colorFilledNeighbor
 			}
-		} else if (type === 'path') {
-			ctx.fillStyle = this.colorFilledPath
+		} else if (type === 'closedSet') {
+			ctx.fillStyle = this.colorFilledClosedSet
+		} else if (type === 'openSet') {
+			ctx.fillStyle = this.colorFilledOpenSet
 		} else if (type === 'obstacle') {
 			ctx.fillStyle = this.colorFilled
 		} else {
@@ -76,7 +79,7 @@ function Node(x, y, i) {
  */
 function Grid() {
 	this.nodes = []
-	this.countNode = 0;
+	this.countNode = 0
 	this.cellRadius = CELL_RADIUS
 
 	this.create = function () {
@@ -191,7 +194,7 @@ function AStar(grid, start, goal) {
 				console.log("ARRIVED")
 				document.getElementById('finishMessage').textContent = "Arrived!"
 				clearInterval(inter)
-				return 1;
+				return 1
 			}
 
 			// Best option moves from openSet to closedSet
@@ -223,11 +226,11 @@ function AStar(grid, start, goal) {
 			}
 		} else {
 			console.log('NO SOLUTION')
-			return 0;
+			return 0
 		}
 
 		for (let n of closedSet) {
-			grid.nodes[n.index].drawFilled('path')
+			grid.nodes[n.index].drawFilled('closedSet')
 		}
 
 	}, SPEED * 1000)
