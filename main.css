@@ -1,0 +1,31 @@
+/** @format */
+
+#mainWrapper {
+    display: flex;
+    flex-direction: row;
+}
+canvas {
+    border: solid black 2px;
+}
+#panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 200px;
+    margin-left: 10px;
+    font-family: "Courier New", Courier, monospace;
+}
+#panel div {
+    margin-top: 10px;
+}
+#panel div input {
+    width: 97%;
+}
+#launchBtn {
+    margin-top: 10px;
+    font-family: "Courier New", Courier, monospace;
+}
+#finishMessage {
+    font-family: "Courier New", Courier, monospace;
+    text-align: center;
+}

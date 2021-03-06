@@ -6,21 +6,43 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="main.css" />
         <title>A* Pathfinding</title>
     </head>
     <body>
-        <canvas
-            id="pathscreen"
-            width="600"
-            height="600"
-            style="border: solid black 2px"
-        ></canvas>
-        <br />
-        <button id="launchBtn">Find the path</button>
-        <h2
-            id="finishMessage"
-            style="font-family: 'Courier New', Courier, monospace"
-        ></h2>
+        <section id="mainWrapper">
+            <canvas id="pathscreen" width="600" height="600"></canvas>
+
+            <div id="panel">
+                <div>
+                    <label for="startNode">Start node (0-2499):</label>
+                    <input
+                        type="number"
+                        id="startNode"
+                        name="startNode"
+                        min="0"
+                        max="2499"
+                        value="0"
+                    />
+                </div>
+
+                <div>
+                    <label for="goalNode">Goal node (0-2499):</label>
+                    <input
+                        type="number"
+                        id="goalNode"
+                        name="goalNode"
+                        min="0"
+                        max="2499"
+                        value="2499"
+                    />
+                </div>
+
+                <button id="launchBtn">Find the path</button>
+
+                <h2 id="finishMessage"></h2>
+            </div>
+        </section>
         <script src="main.js"></script>
     </body>
 </html>
