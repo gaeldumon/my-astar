@@ -16,7 +16,7 @@ const COLORS = {
 	LIGHT_BLUE: 'rgb(7,240,252)',
 	BLUE: 'rgb(73,73,252)',
 	GREY: 'rgb(163, 163, 163)',
-	TRANSPARENT: 'rgb(255,255,255)'
+	WHITE: 'rgb(255,255,255)'
 }
 const START_COLOR = COLORS.BLUE
 const GOAL_COLOR = COLORS.GREEN
@@ -266,14 +266,14 @@ goal.draw(GOAL_COLOR)
 
 
 startNodeInput.addEventListener('change', (e) => {
-	start.draw(COLORS.TRANSPARENT)
+	start.draw(COLORS.WHITE)
 	start = grid.nodes[e.target.value]
 	start.draw(START_COLOR)
 })
 
 
 goalNodeInput.addEventListener('change', (e) => {
-	goal.draw(COLORS.TRANSPARENT)
+	goal.draw(COLORS.WHITE)
 	goal = grid.nodes[e.target.value]
 	goal.draw(GOAL_COLOR)
 })
